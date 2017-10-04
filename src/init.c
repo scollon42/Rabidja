@@ -18,6 +18,14 @@ void            load(void)
 
     set_level_value(2);
     change_level();
+
+    set_nb_life(3);
+    set_nb_star(0);
+
+    init_ui();
+
+    load_bg_music(BG_MUSIC);
+    load_sound();
 }
 
 void            init(char *title)
@@ -45,6 +53,9 @@ void            init(char *title)
         printf("Impossible d'initialiser SDL TTF: %s\n", TTF_GetError());
         exit(EXIT_FAILURE);
     }
+    
+    load_font(FONT, 32);
+
     if ((Mix_Init(MIX_INIT_FLAC) & MIX_INIT_FLAC) != MIX_INIT_FLAC)
     {
         printf("Mix_Init: Failed to init SDL_Mixer\n");
@@ -65,6 +76,9 @@ void            cleanup(void)
     clean_maps();
     clean_monsters();
     clean_player();
+    clean_ui();
+    clean_music();
+    free_sound();
     Mix_CloseAudio();
     Mix_Quit();
 

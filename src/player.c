@@ -2,6 +2,29 @@
 
 int         level;
 GameObject  player;
+int         lifes;
+int         stars;
+
+
+int         get_nb_life(void)
+{
+    return (lifes);
+}
+
+void        set_nb_life(int value)
+{
+    lifes = value;
+}
+
+int         get_nb_star(void)
+{
+    return (stars);
+}
+
+void         set_nb_star(int value)
+{
+    stars = value;
+}
 
 int         get_life(void)
 {
@@ -11,6 +34,7 @@ int         get_life(void)
 void        kill_player(void)
 {
     player.timer_death = 1;
+    play_fx(DESTROY);
 }
 
 void        player_hurts(GameObject *monster)
@@ -20,6 +44,7 @@ void        player_hurts(GameObject *monster)
         player.life--;
         player.invicible_timer = 80;
         monster->timer_death = 1;
+        play_fx(DESTROY);
         player.dir.y = -JUMP_HEIGHT;
     }
 }
@@ -172,12 +197,14 @@ void        update_player(Input *input)
         {
             if (player.on_ground == 1)
             {
+                play_fx(JUMP);
                 player.dir.y        = -JUMP_HEIGHT;
                 player.on_ground    = 0;
                 player.jump         = 1;
             }
             else if (player.jump)
             {
+                play_fx(JUMP);
                 player.dir.y        = -JUMP_HEIGHT;
                 player.jump         = 0;
             }
@@ -221,6 +248,8 @@ void        update_player(Input *input)
         player.timer_death--;
         if (player.timer_death == 0)
         {
+            set_nb_life(get_nb_life() - 1);
+
             change_level();
             init_player(0);
         }
@@ -312,6 +341,36 @@ void            center_scrolling_on_player(void)
         new_start = get_start();
         new_start.y = 0;
         set_start(new_start);
+    }
+
+}
+
+void            get_item(int    item_type)
+{
+    switch ( item_type )
+    {
+        case 1:
+            set_nb_star(get_nb_star() + 1);
+            play_fx(STAR);
+
+            if (get_nb_star() >= 100)
+            {
+                if (get_nb_life() < 99)
+                    set_nb_life(get_nb_life() + 1);
+            }
+            break;
+        case 2:
+            if (player.life < 3)
+                player.life++;
+            play_fx(STAR);
+            break;
+        case 3:
+            if (get_nb_life() < 99)
+                set_nb_life(get_nb_life() + 1);
+            play_fx(STAR);
+            break;
+        default:
+            break;
     }
 
 }

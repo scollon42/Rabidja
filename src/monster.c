@@ -94,7 +94,10 @@ void        update_monsters(void)
                 else
                     kill_player();
             else if (coll == 2)
+            {
                 monsters[i].timer_death = 1;
+                play_fx(DESTROY);
+            }
 
         }
 

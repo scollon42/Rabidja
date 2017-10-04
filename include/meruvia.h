@@ -67,6 +67,22 @@
 # define PLAYER_SPRITE      "./data/sprites/rabidja.png"
 # define MONSTER_SPRITE     "./data/sprites/monster.png"
 # define MAP_FORMAT         "./data/maps/map%d.txt"
+# define FONT               "./data/font/GenBasB.ttf"
+# define LIFE_SPRITE        "./data/sprites/life.png"
+# define STAR_SPRITE        "./data/sprites/star.png"
+# define BUMPER_SOUND       "./data/sounds/bumper.wav"
+# define DESTROY_SOUND      "./data/sounds/destroy.wav"
+# define JUMP_SOUND         "./data/sounds/jump.wav"
+# define STAR_SOUND         "./data/sounds/star.wav"
+# define BG_MUSIC           "./data/sounds/bg_music.ogg"
+
+enum
+{
+    BUMPER,
+    DESTROY,
+    JUMP,
+    STAR
+};
 
 typedef struct          s_float_point
 {
@@ -78,6 +94,7 @@ typedef struct          s_game_object
 {
 
     int         life;
+    int         stars;
     int         invicible_timer;
     
     SDL_Rect    state;
@@ -193,4 +210,28 @@ extern  int             get_life(void);
 extern  void            kill_player(void);
 extern  void            player_hurts(GameObject *monster);
 extern  int             get_tile_value(int x, int y);
+
+extern  void            init_ui(void);
+extern  void            clean_ui(void);
+extern  void            draw_ui(void);
+
+extern  void            load_font(char *name, int size);
+extern  void            close_font();
+extern  void            draw_string(char *str, SDL_Point pos, SDL_Color rgba);
+
+
+extern  int             get_nb_life(void);
+extern  void            set_nb_life(int value);
+extern  int             get_nb_star(void);
+extern  void            set_nb_star(int value);
+
+extern  SDL_Texture     *get_tile_set_a(void);
+extern  SDL_Texture     *get_tile_set_b(void);
+
+extern  void            load_bg_music(char *filename);
+extern  void            clean_music(void);
+extern  void            load_sound(void);
+extern  void            free_sound(void);
+extern  void            play_fx(int type);
+extern  void            get_item(int item_type);
 #endif

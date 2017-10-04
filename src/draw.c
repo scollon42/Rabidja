@@ -1,5 +1,7 @@
 #include "meruvia.h"
 
+SDL_Texture *UI_life;
+SDL_Texture *UI_star;
 
 void        draw_tile(SDL_Texture *image, int destx, int desty, int srcx, int srcy)
 {
@@ -39,6 +41,7 @@ void        draw(void)
 
     draw_map(3);
 
+    draw_ui();
 
     SDL_RenderPresent(get_renderer());
 
@@ -88,4 +91,45 @@ void        delay(unsigned int frame_limit)
         SDL_Delay(16);
     else
         SDL_Delay(frame_limit - ticks);
+}
+
+void        init_ui(void)
+{
+    UI_life = load_image(LIFE_SPRITE);
+    UI_star = load_image(STAR_SPRITE);
+}
+
+void        clean_ui(void)
+{
+    if (UI_life)
+        SDL_DestroyTexture(UI_life);
+    if (UI_star)
+        SDL_DestroyTexture(UI_star);
+
+    UI_life = NULL;
+    UI_star = NULL;
+}
+
+void        draw_ui(void)
+{
+    char        text[200];
+    int         i;
+    SDL_Point   src;
+
+    for (i = 0 ; i < get_life() ; i++)
+    {
+        src.y   = TILE_PWUP_HEART / 10 * TILE_SIZE;
+        src.x   = TILE_PWUP_HEART % 10 * TILE_SIZE;
+        draw_tile(get_tile_set_a(), 60 + i * 32, 20, src.x, src.y);
+    }
+
+    draw_image(UI_life, WIDTH - 120, HEIGHT - 70);
+    sprintf(text, "x %d", get_nb_life());
+    
+    draw_string(text, (SDL_Point) { .x = WIDTH - 80, .y = HEIGHT - 60}, (SDL_Color){ .r = 0, .g = 0, .b = 0, .a = 255 });
+    draw_string(text, (SDL_Point) { .x = WIDTH - 82, .y = HEIGHT - 62}, (SDL_Color){ .r = 255, .g = 255, .b = 255, .a = 255 });
+    draw_image(UI_star, 60, 60);
+    sprintf(text, "%d", get_nb_star());
+    draw_string(text, (SDL_Point){ .x = 100, .y = 57 }, (SDL_Color){.r = 0, .g = 0, .b = 0, .a = 255});
+    draw_string(text, (SDL_Point){ .x = 98, .y = 55 }, (SDL_Color){.r = 255, .g = 255, .b = 255, .a = 255});
 }

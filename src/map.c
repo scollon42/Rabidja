@@ -30,6 +30,17 @@ void            init_maps(void)
     map.tile_set_nb = 0;
 }
 
+
+SDL_Texture     *get_tile_set_a(void)
+{
+    return map.tile_set_a;
+}
+
+SDL_Texture     *get_tile_set_b(void)
+{
+    return map.tile_set_b;
+}
+
 int             get_tile_value(int y, int x)
 {
     return (map.tile[y][x]);
@@ -270,6 +281,19 @@ void        map_collision(GameObject *entity)
         {
             if (entity->dir.x > 0)
             {
+                if (map.tile[a.y][b.x] >= TILE_PWUP_BEGIN && map.tile[a.y][b.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[a.y][b.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[a.y][b.x] = 0;
+                }
+                else if (map.tile[b.y][b.x] >= TILE_PWUP_BEGIN && map.tile[b.y][b.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[b.y][b.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[b.y][b.x] = 0;
+                }
+
+
+
                 if (map.tile[a.y][b.x] > BLANK_TILE || map.tile[b.y][b.x] > BLANK_TILE)
                 {
                     entity->state.x = b.x * TILE_SIZE;
@@ -279,6 +303,16 @@ void        map_collision(GameObject *entity)
             }
             else if (entity->dir.x < 0)
             {
+                if (map.tile[a.y][a.x] >= TILE_PWUP_BEGIN && map.tile[a.y][a.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[a.y][a.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[a.y][a.x] = 0;
+                }
+                else if (map.tile[b.y][a.x] >= TILE_PWUP_BEGIN && map.tile[b.y][a.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[b.y][a.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[b.y][a.x] = 0;
+                }
                 if (map.tile[a.y][a.x] > BLANK_TILE || map.tile[b.y][a.x] > BLANK_TILE)
                 {
                     entity->state.x = (a.x + 1) * TILE_SIZE;
@@ -314,7 +348,45 @@ void        map_collision(GameObject *entity)
         {
             if (entity->dir.y > 0)
             {
-                if (map.tile[b.y][a.x] > TILE_TRAVERSABLE || map.tile[b.y][b.x] > TILE_TRAVERSABLE)
+                if (map.tile[b.y][a.x] >= TILE_PWUP_BEGIN && map.tile[b.y][a.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[b.y][a.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[b.y][a.x] = 0;
+                }
+                else if (map.tile[b.y][b.x] >= TILE_PWUP_BEGIN && map.tile[b.y][b.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[b.y][b.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[b.y][b.x] = 0;
+                }
+
+                
+                if (map.tile[b.y][a.x] == TILE_PIKES || map.tile[b.y][b.x] == TILE_PIKES)
+                {
+                    play_fx(DESTROY);
+                    entity->dir.y = -JUMP_HEIGHT;
+                    if (entity->life > 1)
+                    {
+                        if (entity->invicible_timer == 0)
+                        {
+                            entity->life--;
+                            entity->invicible_timer = 80;
+                        }
+                    }
+                    else
+                    {
+                        entity->timer_death = 1;
+                        play_fx(DESTROY);
+                    }
+                }
+
+                else if (map.tile[b.y][a.x] == TILE_RESSORT || map.tile[b.y][b.x] == TILE_RESSORT)
+                {
+                    entity->dir.y       = -20;
+                    entity->on_ground   = 1;
+                    play_fx(BUMPER);
+                }
+
+                else if (map.tile[b.y][a.x] > TILE_TRAVERSABLE || map.tile[b.y][b.x] > TILE_TRAVERSABLE)
                 {
                     entity->state.y     = b.y * TILE_SIZE;
                     entity->state.y     -= entity->state.h;
@@ -324,6 +396,18 @@ void        map_collision(GameObject *entity)
             }
             else if (entity->dir.y < 0)
             {
+                if (map.tile[a.y][a.x] >= TILE_PWUP_BEGIN && map.tile[a.y][a.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[a.y][a.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[a.y][a.x] = 0;
+                }
+                else if (map.tile[a.y][b.x] >= TILE_PWUP_BEGIN && map.tile[a.y][b.x] <= TILE_PWUP_END)
+                {
+                    get_item(map.tile[a.y][b.x] - TILE_PWUP_BEGIN + 1);
+                    map.tile[a.y][b.x] = 0;
+                }
+
+
                 if (map.tile[a.y][a.x] > BLANK_TILE || map.tile[a.y][b.x] > BLANK_TILE)
                 {
                     entity->state.y = (a.y + 1) * TILE_SIZE;
