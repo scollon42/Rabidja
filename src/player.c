@@ -3,6 +3,26 @@
 int         level;
 GameObject  player;
 
+int         get_life(void)
+{
+    return (player.life);
+}
+
+void        kill_player(void)
+{
+    player.timer_death = 1;
+}
+
+void        player_hurts(GameObject *monster)
+{
+    if (player.invicible_timer == 0)
+    {
+        player.life--;
+        player.invicible_timer = 80;
+        monster->timer_death = 1;
+        player.dir.y = -JUMP_HEIGHT;
+    }
+}
 
 int         get_level(void)
 {
@@ -63,6 +83,8 @@ void        init_player(char new_level)
     if (new_level)
         set_start(get_begin());
 
+    reset_monsters();
+
 }
 
 void        draw_player(void)
@@ -90,11 +112,13 @@ void        draw_player(void)
     src.h   = player.state.h;
     src.y   = player.sprite_type * player.state.h;
 
-    if (player.direction == LEFT)
-        SDL_RenderCopyEx(get_renderer(), player.sprite, &src, &dest, 0, 0, SDL_FLIP_HORIZONTAL);
-    else
-        SDL_RenderCopyEx(get_renderer(), player.sprite, &src, &dest, 0, 0, SDL_FLIP_NONE);
-
+    if (player.invicible_timer <= 0 || player.frame_number % 2 == 0)
+    {
+        if (player.direction == LEFT)
+            SDL_RenderCopyEx(get_renderer(), player.sprite, &src, &dest, 0, 0, SDL_FLIP_HORIZONTAL);
+        else
+            SDL_RenderCopyEx(get_renderer(), player.sprite, &src, &dest, 0, 0, SDL_FLIP_NONE);
+    }
 }
 
 void        update_player(Input *input)

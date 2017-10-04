@@ -13,9 +13,10 @@ void            load(void)
 {
     init_maps();
 
+    init_monster_sprite();
     init_player_sprite();
 
-    set_level_value(1);
+    set_level_value(2);
     change_level();
 }
 
@@ -62,6 +63,7 @@ void            init(char *title)
 void            cleanup(void)
 {
     clean_maps();
+    clean_monsters();
     clean_player();
     Mix_CloseAudio();
     Mix_Quit();

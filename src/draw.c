@@ -21,6 +21,8 @@ void        draw_tile(SDL_Texture *image, int destx, int desty, int srcx, int sr
 
 void        draw(void)
 {
+    int     i;
+
     SDL_SetRenderDrawColor(get_renderer(), 0, 0, 0, 255);
     SDL_RenderClear(get_renderer());
     
@@ -31,6 +33,9 @@ void        draw(void)
     draw_map(1);
 
     draw_player();
+
+    for (i = 0; i < get_monsters_nb(); i++)
+        draw_monster(get_monster(i));
 
     draw_map(3);
 

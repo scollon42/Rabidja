@@ -30,6 +30,11 @@ void            init_maps(void)
     map.tile_set_nb = 0;
 }
 
+int             get_tile_value(int y, int x)
+{
+    return (map.tile[y][x]);
+}
+
 void            load_map(char *name)
 {
     int     x;
@@ -116,7 +121,12 @@ void            draw_map(int layer)
             map_x = map.map_start.x / TILE_SIZE;
             for (x = x1; x < x2; x += TILE_SIZE)
             {
- 
+                if (map.tile[map_y][map_x] == TILE_MONSTER)
+                {
+                    new_monster(map_x * TILE_SIZE, map_y * TILE_SIZE);
+                    map.tile[map_y][map_x] = 0;
+                }
+
                 a = map.tile[map_y][map_x];
  
                 ysrc = a / 10 * TILE_SIZE;
@@ -141,7 +151,11 @@ void            draw_map(int layer)
  
             for (x = x1; x < x2; x += TILE_SIZE)
             {
- 
+                if (map.tile2[map_y][map_x] == TILE_MONSTER)
+                {
+                    new_monster(map_x * TILE_SIZE, map_y * TILE_SIZE);
+                    map.tile2[map_y][map_x] = 0;
+                }
                 a = map.tile2[map_y][map_x];
  
                 ysrc = a / 10 * TILE_SIZE;
@@ -167,7 +181,11 @@ void            draw_map(int layer)
  
             for (x = x1; x < x2; x += TILE_SIZE)
             {
- 
+                if (map.tile3[map_y][map_x] == TILE_MONSTER)
+                {
+                    new_monster(map_x * TILE_SIZE, map_y * TILE_SIZE);
+                    map.tile3[map_y][map_x] = 0;
+                }
                 a = map.tile3[map_y][map_x];
  
                 ysrc = a / 10 * TILE_SIZE;
@@ -229,6 +247,113 @@ void            clean_maps(void)
 }
 
 void        map_collision(GameObject *entity)
+{
+    int         i;
+    SDL_Point   a;
+    SDL_Point   b;
+
+    entity->on_ground = 0;
+    
+    if (entity->state.h > TILE_SIZE)
+        i = TILE_SIZE;
+    else
+        i = entity->state.h;
+
+    while(1)
+    {
+        a.x = (entity->state.x + entity->dir.x) / TILE_SIZE;
+        b.x = (entity->state.x + entity->dir.x + entity->state.w - 1) / TILE_SIZE;
+        a.y = (entity->state.y) / TILE_SIZE;
+        b.y = (entity->state.y + i - 1)/ TILE_SIZE;
+
+        if (a.x >= 0 && b.x < MAX_MAP_X && a.y >= 0 && b.y < MAX_MAP_Y)
+        {
+            if (entity->dir.x > 0)
+            {
+                if (map.tile[a.y][b.x] > BLANK_TILE || map.tile[b.y][b.x] > BLANK_TILE)
+                {
+                    entity->state.x = b.x * TILE_SIZE;
+                    entity->state.x -= entity->state.w + 1;
+                    entity->dir.x   = 0;
+                }
+            }
+            else if (entity->dir.x < 0)
+            {
+                if (map.tile[a.y][a.x] > BLANK_TILE || map.tile[b.y][a.x] > BLANK_TILE)
+                {
+                    entity->state.x = (a.x + 1) * TILE_SIZE;
+                    entity->dir.x   = 0;
+                }
+            }
+        }
+        if (entity->state.h == i)
+            break;
+
+        i += TILE_SIZE;
+
+        if (i > entity->state.h)
+            i = entity->state.h;
+
+    }
+
+
+    if (entity->state.w > TILE_SIZE)
+        i = TILE_SIZE;
+    else
+        i = entity->state.w;
+
+    while (1)
+    {
+        a.x = (entity->state.x) / TILE_SIZE;
+        b.x = (entity->state.x + i) / TILE_SIZE;
+        a.y = (entity->state.y + entity->dir.y) / TILE_SIZE;
+        b.y = (entity->state.y + entity->dir.y + entity->state.h)/ TILE_SIZE;
+
+
+        if (a.x >= 0 && b.x < MAX_MAP_X && a.y >= 0 && b.y < MAX_MAP_Y)
+        {
+            if (entity->dir.y > 0)
+            {
+                if (map.tile[b.y][a.x] > TILE_TRAVERSABLE || map.tile[b.y][b.x] > TILE_TRAVERSABLE)
+                {
+                    entity->state.y     = b.y * TILE_SIZE;
+                    entity->state.y     -= entity->state.h;
+                    entity->dir.y       = 0;
+                    entity->on_ground   = 1;
+                }
+            }
+            else if (entity->dir.y < 0)
+            {
+                if (map.tile[a.y][a.x] > BLANK_TILE || map.tile[a.y][b.x] > BLANK_TILE)
+                {
+                    entity->state.y = (a.y + 1) * TILE_SIZE;
+                    entity->dir.y   = 0;
+                }
+            }
+        }
+
+        if (entity->state.w == i)
+           break; 
+
+        i += TILE_SIZE;
+
+        if (i > entity->state.w)
+            i = entity->state.w;
+    }
+
+    entity->state.x += entity->dir.x;
+    entity->state.y += entity->dir.y;
+
+    if (entity->state.x < 0)
+        entity->state.x = 0;
+    else if (entity->state.x + entity->state.w >= map.map_limit.x)
+        entity->state.x = map.map_limit.x - entity->state.w - 1;
+
+    if (entity->state.y > map.map_limit.y)
+        entity->timer_death = 60;
+}
+
+void        monster_collision_to_map(GameObject *entity)
 {
     int         i;
     SDL_Point   a;

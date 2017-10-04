@@ -20,7 +20,7 @@ int main(void)
     {
         input_handler(&input);
         update_player(&input);
-
+        update_monsters();
         draw();
 
         delay(frame_limit);

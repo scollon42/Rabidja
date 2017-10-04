@@ -57,10 +57,15 @@
 # define TILE_BEGIN_PLAT    120
 # define TILE_END_PLAT      121
 
+# define MONSTER_MAX        50
+# define MONSTER_WIDTH      40
+# define MONSTER_HEIGHT     50
+
 # define BACKGROUND         "./data/sprites/background.png"
 # define TILE_FORMAT_A      "./data/sprites/tileset%d.png"
 # define TILE_FORMAT_B      "./data/sprites/tileset%dB.png"
 # define PLAYER_SPRITE      "./data/sprites/rabidja.png"
+# define MONSTER_SPRITE     "./data/sprites/monster.png"
 # define MAP_FORMAT         "./data/maps/map%d.txt"
 
 typedef struct          s_float_point
@@ -171,4 +176,21 @@ extern  void            update_player(Input *input);
 extern  void            center_scrolling_on_player(void);
 extern  void            map_collision(GameObject *entity);
 
+
+extern  GameObject      *get_monster(int nb);
+
+extern  void            draw_monster(GameObject *monster);
+extern  char            check_fall(GameObject *monster);
+extern  char            collide(GameObject *player, GameObject *monster);
+extern  void            update_monsters(void);
+extern  void            new_monster(int x, int y);
+extern  void            clean_monsters(void);
+extern  void            reset_monsters(void);
+extern  int             get_monsters_nb(void);
+extern  void            init_monster_sprite(void);
+extern  void            monster_collision_to_map(GameObject *entity);
+extern  int             get_life(void);
+extern  void            kill_player(void);
+extern  void            player_hurts(GameObject *monster);
+extern  int             get_tile_value(int x, int y);
 #endif
