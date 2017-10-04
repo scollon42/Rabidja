@@ -24,7 +24,7 @@ SDL_Point       get_max(void)
 
 void            init_maps(void)
 {
-    map.background  = load_image("background.png");
+    map.background  = load_image(BACKGROUND);
 
     map.map_timer   = TIME_SWITCH * 3;
     map.tile_set_nb = 0;
@@ -35,7 +35,6 @@ void            load_map(char *name)
     int     x;
     int     y;
     FILE    *fp;
-    int      err;
 
     if (!(fp = fopen(name, "rb")))
         exit(EXIT_FAILURE);
@@ -192,7 +191,7 @@ void            change_level(void)
 {
     char        file[200];
 
-    sprintf(file, "map%d.txt", get_level());
+    sprintf(file, MAP_FORMAT, get_level());
     load_map(file);
     
     if (map.tile_set_a)
@@ -200,10 +199,10 @@ void            change_level(void)
     if (map.tile_set_b)
         SDL_DestroyTexture(map.tile_set_b);
 
-    sprintf(file, "tileset%d.png", map.tile_set_id);
+    sprintf(file, TILE_FORMAT_A, map.tile_set_id);
     map.tile_set_a = load_image(file);
 
-    sprintf(file, "tileset%dB.png", map.tile_set_id);
+    sprintf(file, TILE_FORMAT_B, map.tile_set_id);
     map.tile_set_b = load_image(file);
 }
 

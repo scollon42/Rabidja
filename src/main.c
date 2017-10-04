@@ -2,7 +2,7 @@
 
 Input input;
 
-int main(int ac, char **av)
+int main(void)
 {
     char            go;
     unsigned int    frame_limit;

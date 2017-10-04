@@ -57,6 +57,12 @@
 # define TILE_BEGIN_PLAT    120
 # define TILE_END_PLAT      121
 
+# define BACKGROUND         "./data/sprites/background.png"
+# define TILE_FORMAT_A      "./data/sprites/tileset%d.png"
+# define TILE_FORMAT_B      "./data/sprites/tileset%dB.png"
+# define PLAYER_SPRITE      "./data/sprites/rabidja.png"
+# define MAP_FORMAT         "./data/maps/map%d.txt"
+
 typedef struct          s_float_point
 {
     float       x;

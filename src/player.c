@@ -32,7 +32,7 @@ void        set_player_state_xy(SDL_Point xy)
 
 void        init_player_sprite(void)
 {
-    player.sprite = load_image("rabidja.png");
+    player.sprite = load_image(PLAYER_SPRITE);
 }
 
 void        clean_player(void)

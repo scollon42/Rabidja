@@ -15,7 +15,7 @@ void            load(void)
 
     init_player_sprite();
 
-    set_level_value(2);
+    set_level_value(1);
     change_level();
 }
 
