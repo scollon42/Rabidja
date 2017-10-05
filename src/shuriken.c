@@ -1,4 +1,4 @@
-#include "meruvia.h"
+#include "rabidja.h"
 
 int         nb_shuriken;
 GameObject  shurikens[SHURIKEN_MAX];

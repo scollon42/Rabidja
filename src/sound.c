@@ -1,4 +1,4 @@
-#include "meruvia.h"
+#include "rabidja.h"
 
 Mix_Chunk   *bumper_sound;
 Mix_Chunk   *destroy_sound;

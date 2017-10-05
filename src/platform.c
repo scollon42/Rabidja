@@ -1,4 +1,4 @@
-# include "meruvia.h"
+# include "rabidja.h"
 
 GameObject  platforms[PLATFORMES_MAX];
 SDL_Texture *platform_texture;

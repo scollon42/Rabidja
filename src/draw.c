@@ -1,4 +1,4 @@
-#include "meruvia.h"
+#include "rabidja.h"
 
 SDL_Texture *UI_life;
 SDL_Texture *UI_star;
@@ -38,9 +38,9 @@ void        draw(void)
 
     SDL_SetRenderDrawColor(get_renderer(), 0, 0, 0, 255);
     SDL_RenderClear(get_renderer());
-    
+
     draw_image(get_background(), 0, 0);
-    
+
 
     draw_map(2);
     draw_map(1);
@@ -79,7 +79,7 @@ SDL_Texture *load_image(char *name)
     texture = SDL_CreateTextureFromSurface(get_renderer(), loaded_img);
 
     SDL_FreeSurface(loaded_img);
-    
+
     return (texture);
 }
 
@@ -96,7 +96,7 @@ void        draw_image(SDL_Texture *img, int x, int y)
 void        delay(unsigned int frame_limit)
 {
     unsigned int ticks;
-    
+
     ticks = SDL_GetTicks();
 
     if (frame_limit < ticks)
@@ -140,7 +140,7 @@ void        draw_ui(void)
 
     draw_image(UI_life, WIDTH - 120, HEIGHT - 70);
     sprintf(text, "x %d", get_nb_life());
-    
+
     draw_string(text, (SDL_Point) { .x = WIDTH - 80, .y = HEIGHT - 60}, (SDL_Color){ .r = 0, .g = 0, .b = 0, .a = 255 });
     draw_string(text, (SDL_Point) { .x = WIDTH - 82, .y = HEIGHT - 62}, (SDL_Color){ .r = 255, .g = 255, .b = 255, .a = 255 });
     draw_image(UI_star, 60, 60);

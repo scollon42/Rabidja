@@ -1,5 +1,5 @@
-#ifndef DEF_MERUVIA
-# define DEF_MERUVIA
+#ifndef DEF_RABIDJA
+# define DEF_RABIDJA
 
 # include <stdio.h>
 # include <string.h>
@@ -12,8 +12,8 @@
 # include <SDL2/SDL_ttf.h>
 # include <SDL2/SDL_mixer.h>
 
-# define WIDTH              800
-# define HEIGHT             480
+# define WIDTH              1280
+# define HEIGHT             720
 
 # define MAX_MAP_X          400
 # define MAX_MAP_Y          150
@@ -113,7 +113,7 @@ typedef struct          s_game_object
     int         life;
     int         stars;
     int         invicible_timer;
-    
+
     SDL_Rect    state;
 
     char        checkpoint;
@@ -155,11 +155,11 @@ typedef struct          s_map
     SDL_Point   hero_start;
     SDL_Point   map_start;
     SDL_Point   map_limit;
-    
+
     int         tile[MAX_MAP_Y][MAX_MAP_X];
     int         tile2[MAX_MAP_Y][MAX_MAP_X];
     int         tile3[MAX_MAP_Y][MAX_MAP_X];
-    
+
     int         map_timer;
     int         tile_set_nb;
 }                       Map;
