@@ -83,6 +83,15 @@
 # define STAR_SOUND         "./data/sounds/star.wav"
 # define BG_MUSIC           "./data/sounds/bg_music.ogg"
 # define PLATFORM_SPRITE    "./data/sprites/plateforme.png"
+# define MENU_SCREEN        "./data/sprites/title.png"
+# define SHURIKEN_SPRITE    "./data/sprites/shuriken.png"
+
+# define SHURIKEN_MAX       6
+enum
+{
+    START,
+    PAUSE
+};
 
 enum
 {
@@ -130,6 +139,9 @@ typedef struct          s_game_object
     char        platform_type;
     char        hero_on_it;
     char        jump;
+
+    double      rotation;
+    SDL_Point   center;
 }                       GameObject;
 
 typedef struct          s_map
@@ -257,4 +269,26 @@ extern  void            draw_platforms(void);
 
 extern  SDL_Point       get_player_state_xy(void);
 extern  void            reset_check_point(void);
+
+
+extern  int             get_on_menu(void);
+extern  int             get_menu_type(void);
+extern  void            set_on_menu(char v, int type);
+extern  void            init_menus(void);
+extern  void            clean_menus(void);
+extern  void            update_start_menu(Input *input);
+extern  void            draw_start_menu(void);
+
+extern  void            load_shuriken(void);
+extern  void            clean_shuriken(void);
+extern  int             get_shuriken_nb(void);
+extern  void            reset_shuriken(void);
+extern  void            create_shuriken(void);
+extern  void            update_shuriken(void);
+extern  void            draw_shuriken(void);
+extern  char            shuriken_collide(GameObject *monster);
+
+extern  void            draw_image_plus(SDL_Texture *img, int x, int y, double rotation, SDL_Point center, SDL_RendererFlip flip);
+
+extern  int             get_player_direction(void);
 #endif

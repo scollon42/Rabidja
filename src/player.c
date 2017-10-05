@@ -5,6 +5,10 @@ GameObject  player;
 int         lifes;
 int         stars;
 
+int         get_player_direction(void)
+{
+    return (player.direction);
+}
 
 int         get_nb_life(void)
 {
@@ -103,6 +107,8 @@ void        init_player(char new_level)
 {
     player.life             = 3;
     player.invicible_timer  = 0;
+    reset_shuriken();
+
     player.direction        = RIGHT;
     player.sprite_type      = IDLE;
     player.frame_number     = 0;
@@ -215,6 +221,12 @@ void        update_player(Input *input)
             }
         }
 
+        if (input->attack == 1)
+        {
+            create_shuriken();
+            input->attack = 0;
+        }
+
 
         if (input->jump == 1)
         {
@@ -272,6 +284,9 @@ void        update_player(Input *input)
         if (player.timer_death == 0)
         {
             set_nb_life(get_nb_life() - 1);
+
+            if (get_nb_life() < 0)
+                set_on_menu(1, START);
 
             change_level();
             init_player(0);

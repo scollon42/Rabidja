@@ -21,6 +21,17 @@ void        draw_tile(SDL_Texture *image, int destx, int desty, int srcx, int sr
     SDL_RenderCopy(get_renderer(), image, &src, &dest);
 }
 
+void        draw_image_plus(SDL_Texture *img, int x, int y, double rotation, SDL_Point center, SDL_RendererFlip flip)
+{
+    SDL_Rect    dst;
+
+    dst.x = x;
+    dst.y = y;
+
+    SDL_QueryTexture(img, NULL, NULL, &dst.w, &dst.h);
+    SDL_RenderCopyEx(get_renderer(), img, NULL, &dst, rotation, &center, flip);
+}
+
 void        draw(void)
 {
     int     i;
@@ -40,6 +51,8 @@ void        draw(void)
         draw_monster(get_monster(i));
 
     draw_platforms();
+
+    draw_shuriken();
 
     draw_map(3);
 

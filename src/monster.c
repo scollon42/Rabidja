@@ -87,6 +87,14 @@ void        update_monsters(void)
 
             monsters[i].save.x = monsters[i].state.x;
             monster_collision_to_map(&monsters[i]);
+            if (get_shuriken_nb() > 0)
+            {
+                if (shuriken_collide(&monsters[i]))
+                {
+                    monsters[i].timer_death = 1;
+                    play_fx(DESTROY);
+                }
+            }
             coll = collide(get_player(), &monsters[i]);
             if (coll == 1)
                 if (get_life() > 1)
