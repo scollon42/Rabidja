@@ -7,7 +7,7 @@ CC			= gcc
 CFLGS		= -Werror -Wextra -Wall
 SDL2FLGS	= -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer
 
-SRC_NAME	= main.c player.c map.c init.c draw.c inputs.c monster.c font.c sound.c
+SRC_NAME	= main.c player.c map.c init.c draw.c inputs.c monster.c font.c sound.c platform.c
 OBJ_NAME	= $(SRC_NAME:.c=.o)
 
 SRC			= $(addprefix $(SRC_PATH), $(SRC_NAME))

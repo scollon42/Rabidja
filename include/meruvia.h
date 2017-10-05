@@ -61,6 +61,13 @@
 # define MONSTER_WIDTH      40
 # define MONSTER_HEIGHT     50
 
+# define PLATFORMES_MAX     50
+# define PLATFORM_SPEED     2
+# define UP                 3
+# define DOWN               4
+
+# define LEVEL_MAX          2
+
 # define BACKGROUND         "./data/sprites/background.png"
 # define TILE_FORMAT_A      "./data/sprites/tileset%d.png"
 # define TILE_FORMAT_B      "./data/sprites/tileset%dB.png"
@@ -75,6 +82,7 @@
 # define JUMP_SOUND         "./data/sounds/jump.wav"
 # define STAR_SOUND         "./data/sounds/star.wav"
 # define BG_MUSIC           "./data/sounds/bg_music.ogg"
+# define PLATFORM_SPRITE    "./data/sprites/plateforme.png"
 
 enum
 {
@@ -116,9 +124,12 @@ typedef struct          s_game_object
     FloatPoint  dir;
 
     SDL_Point   save;
-    char        jump;
-
     SDL_Texture *sprite;
+
+    SDL_Point   begin;
+    char        platform_type;
+    char        hero_on_it;
+    char        jump;
 }                       GameObject;
 
 typedef struct          s_map
@@ -234,4 +245,16 @@ extern  void            load_sound(void);
 extern  void            free_sound(void);
 extern  void            play_fx(int type);
 extern  void            get_item(int item_type);
+
+extern  void            load_platform(void);
+extern  void            clean_platform(void);
+extern  int             get_platform_nb(void);
+extern  void            reset_platforms(void);
+extern  void            init_platform(SDL_Point pos, char type);
+extern  void            update_platforms(void);
+extern  void            collisions_with_platform(GameObject *entity);
+extern  void            draw_platforms(void);
+
+extern  SDL_Point       get_player_state_xy(void);
+extern  void            reset_check_point(void);
 #endif

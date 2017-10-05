@@ -137,6 +137,12 @@ void            draw_map(int layer)
                     new_monster(map_x * TILE_SIZE, map_y * TILE_SIZE);
                     map.tile[map_y][map_x] = 0;
                 }
+                else if (map.tile[map_y][map_x] >= TILE_BEGIN_PLAT &&
+                        map.tile[map_y][map_x] <= TILE_END_PLAT) 
+                {
+                    init_platform((SDL_Point){ .x = map_x * TILE_SIZE, .y = map_y * TILE_SIZE }, map.tile[map_y][map_x] - TILE_BEGIN_PLAT + 1);
+                    map.tile[map_y][map_x] = 0;
+                }
 
                 a = map.tile[map_y][map_x];
  
@@ -167,6 +173,14 @@ void            draw_map(int layer)
                     new_monster(map_x * TILE_SIZE, map_y * TILE_SIZE);
                     map.tile2[map_y][map_x] = 0;
                 }
+                else if (map.tile2[map_y][map_x] >= TILE_BEGIN_PLAT &&
+                        map.tile2[map_y][map_x] <= TILE_END_PLAT) 
+                {
+                    init_platform((SDL_Point){ .x = map_x * TILE_SIZE, .y = map_y * TILE_SIZE }, map.tile2[map_y][map_x] - TILE_BEGIN_PLAT + 1);
+                    map.tile2[map_y][map_x] = 0;
+                }
+
+
                 a = map.tile2[map_y][map_x];
  
                 ysrc = a / 10 * TILE_SIZE;
@@ -197,6 +211,13 @@ void            draw_map(int layer)
                     new_monster(map_x * TILE_SIZE, map_y * TILE_SIZE);
                     map.tile3[map_y][map_x] = 0;
                 }
+                else if (map.tile3[map_y][map_x] >= TILE_BEGIN_PLAT &&
+                        map.tile3[map_y][map_x] <= TILE_END_PLAT) 
+                {
+                    init_platform((SDL_Point){ .x = map_x * TILE_SIZE, .y = map_y * TILE_SIZE }, map.tile3[map_y][map_x] - TILE_BEGIN_PLAT + 1);
+                    map.tile3[map_y][map_x] = 0;
+                }
+
                 a = map.tile3[map_y][map_x];
  
                 ysrc = a / 10 * TILE_SIZE;
@@ -292,6 +313,18 @@ void        map_collision(GameObject *entity)
                     map.tile[b.y][b.x] = 0;
                 }
 
+                if (map.tile[a.y][b.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = b.x * TILE_SIZE;
+                    entity->respawn.y = (a.y * TILE_SIZE) - entity->state.h;
+                }
+                else if (map.tile[b.y][b.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = b.x * TILE_SIZE;
+                    entity->respawn.y = (b.y * TILE_SIZE) - entity->state.h;
+                }
 
 
                 if (map.tile[a.y][b.x] > BLANK_TILE || map.tile[b.y][b.x] > BLANK_TILE)
@@ -313,6 +346,22 @@ void        map_collision(GameObject *entity)
                     get_item(map.tile[b.y][a.x] - TILE_PWUP_BEGIN + 1);
                     map.tile[b.y][a.x] = 0;
                 }
+
+                if (map.tile[a.y][a.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = a.x * TILE_SIZE;
+                    entity->respawn.y = (a.y * TILE_SIZE) - entity->state.h;
+                }
+                else if (map.tile[b.y][a.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = a.x * TILE_SIZE;
+                    entity->respawn.y = (b.y * TILE_SIZE) - entity->state.h;
+                }
+
+
+
                 if (map.tile[a.y][a.x] > BLANK_TILE || map.tile[b.y][a.x] > BLANK_TILE)
                 {
                     entity->state.x = (a.x + 1) * TILE_SIZE;
@@ -360,6 +409,19 @@ void        map_collision(GameObject *entity)
                 }
 
                 
+                if (map.tile[b.y][a.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = a.x * TILE_SIZE;
+                    entity->respawn.y = (b.y * TILE_SIZE) - entity->state.h;
+                }
+                else if (map.tile[b.y][b.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = b.x * TILE_SIZE;
+                    entity->respawn.y = (b.y * TILE_SIZE) - entity->state.h;
+                }
+
                 if (map.tile[b.y][a.x] == TILE_PIKES || map.tile[b.y][b.x] == TILE_PIKES)
                 {
                     play_fx(DESTROY);
@@ -393,6 +455,9 @@ void        map_collision(GameObject *entity)
                     entity->dir.y       = 0;
                     entity->on_ground   = 1;
                 }
+
+                if (get_platform_nb() > 0)
+                    collisions_with_platform(entity);
             }
             else if (entity->dir.y < 0)
             {
@@ -405,6 +470,19 @@ void        map_collision(GameObject *entity)
                 {
                     get_item(map.tile[a.y][b.x] - TILE_PWUP_BEGIN + 1);
                     map.tile[a.y][b.x] = 0;
+                }
+
+                if (map.tile[a.y][a.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = a.x * TILE_SIZE;
+                    entity->respawn.y = (a.y * TILE_SIZE) - entity->state.h;
+                }
+                else if (map.tile[a.y][b.x] == TILE_CHECKPOINT)
+                {
+                    entity->checkpoint = 1;
+                    entity->respawn.x = b.x * TILE_SIZE;
+                    entity->respawn.y = (a.y * TILE_SIZE) - entity->state.h;
                 }
 
 

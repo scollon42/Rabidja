@@ -37,6 +37,11 @@ void        kill_player(void)
     play_fx(DESTROY);
 }
 
+void        reset_check_point(void)
+{
+    player.checkpoint = 0;
+}
+
 void        player_hurts(GameObject *monster)
 {
     if (player.invicible_timer == 0)
@@ -67,6 +72,12 @@ GameObject  *get_player(void)
 SDL_Rect   get_player_sate(void)
 {
     return (player.state);
+}
+
+
+SDL_Point   get_player_state_xy(void)
+{
+    return ((SDL_Point) { .x = player.state.x, .y = player.state.y });
 }
 
 void        set_player_state_xy(SDL_Point xy)
@@ -105,10 +116,22 @@ void        init_player(char new_level)
     player.on_ground        = 0;
     player.jump             = 0;
 
+    if (player.checkpoint)
+    {
+        player.state.x = player.respawn.x;
+        player.state.y = player.respawn.y;
+    }
+    else
+    {
+        player.state.x = player.begin.x;
+        player.state.y = player.begin.y;
+    }
+
     if (new_level)
         set_start(get_begin());
 
     reset_monsters();
+    reset_platforms();
 
 }
 

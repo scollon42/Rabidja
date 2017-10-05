@@ -16,12 +16,13 @@ void            load(void)
     init_monster_sprite();
     init_player_sprite();
 
-    set_level_value(2);
+    set_level_value(1);
     change_level();
 
     set_nb_life(3);
     set_nb_star(0);
 
+    load_platform();
     init_ui();
 
     load_bg_music(BG_MUSIC);
@@ -78,6 +79,7 @@ void            cleanup(void)
     clean_player();
     clean_ui();
     clean_music();
+    clean_platform();
     free_sound();
     Mix_CloseAudio();
     Mix_Quit();

@@ -39,6 +39,8 @@ void        draw(void)
     for (i = 0; i < get_monsters_nb(); i++)
         draw_monster(get_monster(i));
 
+    draw_platforms();
+
     draw_map(3);
 
     draw_ui();
